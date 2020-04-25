@@ -5,6 +5,7 @@
  */
 package model.beans;
 
+import java.util.List;
 import javax.ejb.Stateless;
 
 /**
@@ -12,8 +13,8 @@ import javax.ejb.Stateless;
  * @author User
  */
 @Stateless
-public class ProviderDAO implements UserDAO{
+public interface ProviderDAO extends UserDAO{ //implements changed to extends
 
-    
+    List findProvider();
     
 }

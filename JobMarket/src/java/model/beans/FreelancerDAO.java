@@ -5,6 +5,7 @@
  */
 package model.beans;
 
+import java.util.List;
 import javax.ejb.Stateless;
 
 /**
@@ -12,8 +13,10 @@ import javax.ejb.Stateless;
  * @author User
  */
 @Stateless
-public class FreelancerDAO {
-
+public interface FreelancerDAO extends UserDAO {
+    
+    public List getAllFreelancer();
+    
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
 }

@@ -36,6 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Freelancers.findById", query = "SELECT f FROM Freelancers f WHERE f.id = :id")
     , @NamedQuery(name = "Freelancers.findByDescription", query = "SELECT f FROM Freelancers f WHERE f.description = :description")
     , @NamedQuery(name = "Freelancers.findByTokens", query = "SELECT f FROM Freelancers f WHERE f.tokens = :tokens")})
+
 public class Freelancer extends User implements Serializable {
 
     private static final long serialVersionUID = 1L;

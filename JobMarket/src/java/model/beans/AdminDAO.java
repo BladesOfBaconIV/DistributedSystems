@@ -5,6 +5,7 @@
  */
 package model.beans;
 
+import java.util.List;
 import javax.ejb.Stateless;
 
 /**
@@ -12,8 +13,12 @@ import javax.ejb.Stateless;
  * @author User
  */
 @Stateless
-public class AdminDAO {
+public interface AdminDAO extends UserDAO {
 
+    
+    public List getAllAdmins();
+    
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
+    
 }
