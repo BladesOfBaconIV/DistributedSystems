@@ -5,15 +5,25 @@
  */
 package model.beans;
 
+import java.util.List;
 import javax.ejb.Stateless;
+import model.entity.Freelancer;
 
 /**
  *
  * @author User
  */
 @Stateless
-public class FreelancerDAO {
-
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
+public interface FreelancerDAO extends UserDAO<Freelancer> {
+    
+    public List getAllFreelancers();
+    
+    public Freelancer findByDescription();
+    
+    public List findByTokens();
+    
+    //Add any additional custom methods unique to Admins here.
+   
+    
+    
 }

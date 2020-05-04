@@ -5,15 +5,19 @@
  */
 package model.beans;
 
+import java.util.List;
 import javax.ejb.Stateless;
+import model.entity.Provider;
 
 /**
  *
  * @author User
  */
 @Stateless
-public class ProviderDAO implements UserDAO{
+public interface ProviderDAO extends UserDAO<Provider>{ //implements changed to extends
 
+    List findAllProviders();
     
+    //Add any additional custom methods unique to Admins here.
     
 }
