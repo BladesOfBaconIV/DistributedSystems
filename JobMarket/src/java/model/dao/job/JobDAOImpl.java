@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model.beans;
+package model.dao.job;
 
 import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityTransaction;
-import javax.persistence.NamedQuery;
 import javax.persistence.Query;
+import model.dao.BaseJPADao;
 import model.entity.Freelancer;
 import model.entity.Job;
 import model.entity.Keyword;
@@ -19,7 +19,7 @@ import model.entity.Provider;
  *
  * @author darra
  */
-public class JobDAOImpl extends UserDAOImpl<Job> implements JobDAO{
+public class JobDAOImpl extends BaseJPADao implements JobDAO{
 
     //Default no-arg constructor
     public JobDAOImpl() {
@@ -27,7 +27,12 @@ public class JobDAOImpl extends UserDAOImpl<Job> implements JobDAO{
     }
 
     @Override
-    public void persist(Job user) {
+    public void persist(Job job) {
+        
+    }
+    
+    @Override
+    public void remove(Job job) {
         
     }
     
@@ -51,56 +56,56 @@ public class JobDAOImpl extends UserDAOImpl<Job> implements JobDAO{
         Long maxId = getMaxId("SELECT max(j.id) FROM Job j");
         job.setId((int) ((maxId == null)? 0 : maxId + 1));
         
-        EntityTransaction j = entityManager.getTransaction();
+        EntityTransaction j = getEntityManager().getTransaction();
         j.begin();
-        entityManager.persist(job);
+        getEntityManager().persist(job);
         j.commit();
         
         return job;
     }
 
     @Override
-    public void businessMethod() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public Job update() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
     
-    public List getAllJobs(){
-        Query q = entityManager.createNamedQuery("Jobs.findAll");
+    @Override
+    public List getAll(){
+        Query q = getEntityManager().createNamedQuery("Jobs.findAll");
 
         return (List) q.getResultList();
     }
 
-    //Not sure if inherited function covers this function
-    public Job findById(int id) {
-        Query q = entityManager.createNamedQuery("Jobs.findById");
-
+    @Override
+    public Job findByID(int id) {
+        Query q = getEntityManager()
+                .createNamedQuery("Jobs.findById")
+                .setParameter("id", id);
         return (Job) q.getSingleResult();
     }
 
     
+    @Override
     public Job findByDesc(String description){
-        Query q = entityManager.createNamedQuery("Jobs.findByDescription"); //there is a typo in the table and entity desciption not description
-
+        Query q = getEntityManager()
+                .createNamedQuery("Jobs.findByDesciption") //there is a typo in the table and entity desciption not description
+                .setParameter("desciption", description);
         return (Job) q.getSingleResult();
     }
 
     @Override
     public List<Job> getJobsOwnedByProvider(int provider_id) {
-        Query q = entityManager.createQuery("SELECT j FROM Jobs j WHERE j.creator =: provider_id");
-
+        Query q = getEntityManager()
+                .createNamedQuery("Jobs.findByProvider")
+                .setParameter("provider_id", provider_id);
         return (List) q.getResultList();
     }
 
     @Override
     public List<Job> getOpenJobs() {
-        Query q = entityManager.createQuery("SELECT j FROM Job j WHERE" +
-                                            "j.state = :newState OR j.state =: openState"); //need a Open/Closed/Complete job state column.
+        Query q = getEntityManager()
+                .createQuery("SELECT j FROM Job j WHERE" +
+                                "j.state = :newState OR j.state =: openState"); //need a Open/Closed/Complete job state column.
 
         q.setParameter("newState", "NEW");
         q.setParameter("openState", "OPEN");
@@ -110,7 +115,7 @@ public class JobDAOImpl extends UserDAOImpl<Job> implements JobDAO{
     
     private long getMaxId(String maxQuery) {
         
-        Query q = entityManager.createQuery(maxQuery);
+        Query q = getEntityManager().createQuery(maxQuery);
         
         Long maxId = 1L;
         

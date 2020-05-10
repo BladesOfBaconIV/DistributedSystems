@@ -3,32 +3,34 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model.beans;
+package model.dao.user;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import model.entity.User;
 
 /**
  *
  * @author darra
- * @param <User>
+ * @param <T>
  */
-public abstract class UserDAOImpl<User> implements UserDAO<User>{
+public abstract class UserDAOImpl<T extends User> implements UserDAO<T>{
     
-    protected Class<User> entityClass;
+    protected Class<T> entityClass;
     
     @PersistenceContext
     protected EntityManager entityManager;
    
     public UserDAOImpl(){
         ParameterizedType genericSuperclass = (ParameterizedType) getClass().getGenericSuperclass();
-        this.entityClass = (Class<User>) genericSuperclass.getActualTypeArguments()[1];
+        this.entityClass = (Class<T>) genericSuperclass.getActualTypeArguments()[1];
     }
     
-    public void persists(User user) {
+    @Override
+    public void persist(User user) {
         entityManager.persist(user); 
     }
     
@@ -38,25 +40,27 @@ public abstract class UserDAOImpl<User> implements UserDAO<User>{
     }
     
     @Override
-    public List getAllUsers(){
+    public List getAll(){
         Query q = entityManager.createNamedQuery("Users.findAll");
         return (List) q.getResultList();
     }
     
     @Override
-    public User findbyID(int id) {
-        Query q = entityManager.createNamedQuery("Users.findByID");
-        return (User) q.getSingleResult(); //Unique
+    public T findByID(int id) {
+        Query q = entityManager
+                .createNamedQuery("Users.findByID")
+                .setParameter("id", id);
+        return (T) q.getSingleResult(); //Unique
     }
     
     @Override
-    public User findByUsername(char username) {
+    public T findByUsername(String username) {
         Query q = entityManager.createNamedQuery("User.findByUsername");
-        return (User) q.getSingleResult(); //Unique
+        return (T) q.getSingleResult(); //Unique
     }
     
     @Override
-    public List findByFirstname(char firstname) {
+    public List<User> findByFirstname(String firstname) {
         Query q = entityManager.createNamedQuery("Users.findByFirstname");
         return (List) q.getResultList(); //not unique
     }
@@ -68,14 +72,14 @@ public abstract class UserDAOImpl<User> implements UserDAO<User>{
     }
     
     @Override
-    public User findByPassword(char password) {
+    public T findByPassword(char password) {
         Query q = entityManager.createNamedQuery("Users.findByPassword");
-        return (User) q.getSingleResult(); //Assuming this must be unique
+        return (T) q.getSingleResult(); //Assuming this must be unique
     }
     
     @Override
-    public User findByEmail(char email){
+    public T findByEmail(char email){
         Query q = entityManager.createNamedQuery("Users.findByEmail");
-        return (User) q.getSingleResult(); //Unique
+        return (T) q.getSingleResult(); //Unique
     }
 }

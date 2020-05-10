@@ -3,27 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model.beans;
+package model.dao.user;
 
 import java.util.List;
 import javax.ejb.Stateless;
-import model.entity.Freelancer;
+import model.entity.Provider;
 
 /**
  *
  * @author User
  */
 @Stateless
-public interface FreelancerDAO extends UserDAO<Freelancer> {
-    
-    public List getAllFreelancers();
-    
-    public Freelancer findByDescription();
-    
-    public List findByTokens();
+public interface ProviderDAO extends UserDAO<Provider>{ //implements changed to extends
+
+    List findAllProviders();
     
     //Add any additional custom methods unique to Admins here.
-   
-    
     
 }

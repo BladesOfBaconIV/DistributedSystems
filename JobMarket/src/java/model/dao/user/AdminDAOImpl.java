@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model.beans;
+package model.dao.user;
 
 import java.util.List;
 import javax.persistence.Query;
@@ -14,7 +14,7 @@ public abstract class AdminDAOImpl extends UserDAOImpl<Admin> implements AdminDA
     
     
     //I don't know if any addition functions are needed here that are not in the 
-    //Base DAO (UserDAO).
+    // UserDAO.
 
     public List getAllAdmins() { //May not be needed as getAllUsers is super function in base
         Query q = entityManager.createNamedQuery("Admins.findAll");
