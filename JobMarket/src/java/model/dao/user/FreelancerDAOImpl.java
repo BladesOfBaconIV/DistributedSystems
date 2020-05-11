@@ -10,34 +10,44 @@ import javax.persistence.Query;
 import model.entity.Freelancer;
 
 
-public abstract class FreelancerDAOImpl extends UserDAOImpl<Freelancer> implements FreelancerDAO {
+public class FreelancerDAOImpl extends UserDAOImpl<Freelancer> implements FreelancerDAO {
 
+    @Override
     public List getAllFreelancers() {
-        Query q = entityManager.createNamedQuery("Freelancers.findAll");
+        Query q = getEntityManager().createNamedQuery("Freelancers.findAll");
         return (List) q.getResultList();
     }
 
+    @Override
     public Freelancer findByDescription(String description){ 
-        Query q = entityManager.createNamedQuery("Freelancers.findByDescription");
+        Query q = getEntityManager().createNamedQuery("Freelancers.findByDescription");
+        q.setParameter("description", description);
         return (Freelancer) q.getSingleResult(); //Unique - Actually not sure if this needs to be a list return instead of a single Freelancer
     }
 
-    public List findByTokens(double tokens){  //What type are tokens?
-        Query q = entityManager.createNamedQuery("Freelancers.findByTokens");
-        return (List) q.getResultList();
-    }
-    
-    //Add any additional custom methods unique to Admins here.
-    
-    
-    
-    
-    
-
     @Override
-    public void businessMethod() {
+    public List<Freelancer> findByUsername(String username) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public List<Freelancer> findByFirstname(String firstname) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
+    @Override
+    public List<Freelancer> findByLastname(String lastname) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Freelancer> findByPassword(String password) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Freelancer> findByEmail(String email) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
 }

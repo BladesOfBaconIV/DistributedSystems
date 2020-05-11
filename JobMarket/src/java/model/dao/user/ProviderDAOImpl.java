@@ -15,23 +15,37 @@ import model.entity.Provider;
  * @author darra
  */
 @Stateless
-public abstract class ProviderDAOImpl extends UserDAOImpl<Provider> implements ProviderDAO {
-    
-    public List getAllFreelancers() {
-        Query q = entityManager.createNamedQuery("Providers.findAll");
-        return (List) q.getResultList();
-    }
-    
-    //Add any additional custom methods unique to Admins here.
-    
-    
-    
-    
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
+public class ProviderDAOImpl extends UserDAOImpl<Provider> implements ProviderDAO {
     
     @Override
-    public void businessMethod() {
+    public List getAllProviders() {
+        Query q = getEntityManager().createNamedQuery("Providers.findAll");
+        return (List) q.getResultList();
+    }
+
+    @Override
+    public List<Provider> findByUsername(String username) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public List<Provider> findByFirstname(String firstname) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Provider> findByLastname(String lastname) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Provider> findByPassword(String password) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Provider> findByEmail(String email) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

@@ -18,9 +18,7 @@ public interface FreelancerDAO extends UserDAO<Freelancer> {
     
     public List getAllFreelancers();
     
-    public Freelancer findByDescription();
-    
-    public List findByTokens();
+    public Freelancer findByDescription(String description);
     
     //Add any additional custom methods unique to Admins here.
    

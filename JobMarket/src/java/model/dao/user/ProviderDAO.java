@@ -16,8 +16,6 @@ import model.entity.Provider;
 @Stateless
 public interface ProviderDAO extends UserDAO<Provider>{ //implements changed to extends
 
-    List findAllProviders();
-    
-    //Add any additional custom methods unique to Admins here.
+    public List getAllProviders();
     
 }

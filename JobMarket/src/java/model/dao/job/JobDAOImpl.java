@@ -28,12 +28,12 @@ public class JobDAOImpl extends BaseJPADao implements JobDAO{
 
     @Override
     public void persist(Job job) {
-        
+        getEntityManager().persist(job);
     }
     
     @Override
     public void remove(Job job) {
-        
+        getEntityManager().remove(job);
     }
     
     @Override
