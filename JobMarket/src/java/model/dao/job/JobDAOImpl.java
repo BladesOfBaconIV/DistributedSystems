@@ -7,6 +7,7 @@ package model.dao.job;
 
 import java.util.Collection;
 import java.util.List;
+import javax.ejb.Stateless;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 import model.dao.BaseJPADao;
@@ -19,6 +20,7 @@ import model.entity.Provider;
  *
  * @author darra
  */
+@Stateless
 public class JobDAOImpl extends BaseJPADao implements JobDAO{
 
     //Default no-arg constructor

@@ -6,15 +6,18 @@
 package model.dao.user;
 
 import java.util.List;
+import javax.ejb.Stateless;
 import javax.persistence.Query;
 import model.dao.BaseJPADao;
 import model.entity.User;
 
 /**
- *
+ * Methods to interact with all Users, in general just calls 
+ * the Freelancer, Provider and Admin versions of methods together
  * @author darra
  */
-public abstract class UserDAOImpl<T extends User> extends BaseJPADao implements UserDAO<T>{
+@Stateless
+public class UserDAOImpl<T extends User> extends BaseJPADao implements UserDAO<T>{
    
     public UserDAOImpl(){
 //        ParameterizedType genericSuperclass = (ParameterizedType) getClass().getGenericSuperclass();
@@ -46,6 +49,31 @@ public abstract class UserDAOImpl<T extends User> extends BaseJPADao implements 
                 .createNamedQuery("Users.findByID")
                 .setParameter("id", id);
         return (User) q.getSingleResult(); //Unique
+    }
+
+    @Override
+    public List<T> findByUsername(String username) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<T> findByFirstname(String firstname) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<T> findByLastname(String lastname) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<T> findByPassword(String password) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<T> findByEmail(String email) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

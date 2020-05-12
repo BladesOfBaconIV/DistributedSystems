@@ -13,7 +13,6 @@ import model.entity.Admin;
  *
  * @author User
  */
-@Stateless
 public interface AdminDAO extends UserDAO<Admin> {
     
     //Add any additional custom methods unique to Admins here.

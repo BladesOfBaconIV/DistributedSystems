@@ -13,7 +13,6 @@ import model.entity.Provider;
  *
  * @author User
  */
-@Stateless
 public interface ProviderDAO extends UserDAO<Provider>{ //implements changed to extends
 
     public List getAllProviders();

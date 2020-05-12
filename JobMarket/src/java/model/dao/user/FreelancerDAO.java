@@ -6,14 +6,12 @@
 package model.dao.user;
 
 import java.util.List;
-import javax.ejb.Stateless;
 import model.entity.Freelancer;
 
 /**
  *
  * @author User
  */
-@Stateless
 public interface FreelancerDAO extends UserDAO<Freelancer> {
     
     public List getAllFreelancers();

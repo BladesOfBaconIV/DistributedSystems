@@ -6,11 +6,11 @@
 package model.dao.user;
 
 import java.util.List;
+import javax.ejb.Stateless;
 import javax.persistence.Query;
 import model.entity.Admin;
-import model.entity.User;
 
-
+@Stateless
 public class AdminDAOImpl extends UserDAOImpl<Admin> implements AdminDAO {
     
     

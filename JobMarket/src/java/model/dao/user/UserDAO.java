@@ -6,7 +6,6 @@
 package model.dao.user;
 
 import java.util.List;
-import javax.ejb.Local;
 import model.dao.DAO;
 import model.entity.User;
 
@@ -14,7 +13,6 @@ import model.entity.User;
  *
  * @author User
  */
-@Local
 public abstract interface UserDAO<T extends User> extends DAO<User>{
     
     //User is abstract, cannnot be a user object. 

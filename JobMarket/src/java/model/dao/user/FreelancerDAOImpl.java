@@ -6,10 +6,12 @@
 package model.dao.user;
 
 import java.util.List;
+import javax.ejb.Stateless;
 import javax.persistence.Query;
 import model.entity.Freelancer;
 
 
+@Stateless
 public class FreelancerDAOImpl extends UserDAOImpl<Freelancer> implements FreelancerDAO {
 
     @Override
