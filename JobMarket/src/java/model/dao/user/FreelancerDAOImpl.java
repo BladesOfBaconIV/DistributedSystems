@@ -19,6 +19,12 @@ public class FreelancerDAOImpl extends UserDAOImpl<Freelancer> implements Freela
         Query q = getEntityManager().createNamedQuery("Freelancers.findAll");
         return (List) q.getResultList();
     }
+    
+    @Override
+    public Freelancer findByID(int id) {
+        Query q = getEntityManager().createNamedQuery("Admins.findByID");
+        return (Freelancer) q.getSingleResult(); //Unique
+    }
 
     @Override
     public Freelancer findByDescription(String description){ 
@@ -29,27 +35,37 @@ public class FreelancerDAOImpl extends UserDAOImpl<Freelancer> implements Freela
 
     @Override
     public List<Freelancer> findByUsername(String username) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Query q = getEntityManager().createNamedQuery("User.findByUsername")
+                .setParameter("username", username);
+        return (List<Freelancer>) q.getResultList();
     }
 
     @Override
     public List<Freelancer> findByFirstname(String firstname) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Query q = getEntityManager().createNamedQuery("User.findByFirstname")
+                .setParameter("username", firstname);
+        return (List<Freelancer>) q.getResultList();
     }
 
     @Override
     public List<Freelancer> findByLastname(String lastname) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Query q = getEntityManager().createNamedQuery("User.findByLastname")
+                .setParameter("username", lastname);
+        return (List<Freelancer>) q.getResultList();
     }
 
     @Override
     public List<Freelancer> findByPassword(String password) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Query q = getEntityManager().createNamedQuery("User.findByPassword")
+                .setParameter("username", password);
+        return (List<Freelancer>) q.getResultList();
     }
 
     @Override
     public List<Freelancer> findByEmail(String email) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Query q = getEntityManager().createNamedQuery("User.findByEmail")
+                .setParameter("username", email);
+        return (List<Freelancer>) q.getResultList();
     }
     
 }

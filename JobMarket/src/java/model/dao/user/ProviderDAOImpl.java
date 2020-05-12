@@ -22,30 +22,46 @@ public class ProviderDAOImpl extends UserDAOImpl<Provider> implements ProviderDA
         Query q = getEntityManager().createNamedQuery("Providers.findAll");
         return (List) q.getResultList();
     }
+    
+    @Override
+    public Provider findByID(int id) {
+        Query q = getEntityManager().createNamedQuery("Admins.findByID");
+        return (Provider) q.getSingleResult(); //Unique
+    }
 
     @Override
     public List<Provider> findByUsername(String username) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Query q = getEntityManager().createNamedQuery("User.findByUsername")
+                .setParameter("username", username);
+        return (List<Provider>) q.getResultList();
     }
 
     @Override
     public List<Provider> findByFirstname(String firstname) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Query q = getEntityManager().createNamedQuery("User.findByFirstname")
+                .setParameter("username", firstname);
+        return (List<Provider>) q.getResultList();
     }
 
     @Override
     public List<Provider> findByLastname(String lastname) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Query q = getEntityManager().createNamedQuery("User.findByLastname")
+                .setParameter("username", lastname);
+        return (List<Provider>) q.getResultList();
     }
 
     @Override
     public List<Provider> findByPassword(String password) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Query q = getEntityManager().createNamedQuery("User.findByPassword")
+                .setParameter("username", password);
+        return (List<Provider>) q.getResultList();
     }
 
     @Override
     public List<Provider> findByEmail(String email) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Query q = getEntityManager().createNamedQuery("User.findByEmail")
+                .setParameter("username", email);
+        return (List<Provider>) q.getResultList();
     }
 
 }

@@ -5,10 +5,13 @@
  */
 package presentation;
 
+import java.util.List;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
+import model.dao.user.AdminDAOImpl;
 import model.dao.user.FreelancerDAOImpl;
+import model.entity.Admin;
 import model.entity.Freelancer;
 
 /**
@@ -23,15 +26,32 @@ public class FreelancerView {
     
     @EJB
     private FreelancerDAOImpl freelancerDAO;
-            
+
+    /**
+     * Creates a new instance of AdminView
+     */
     public FreelancerView() {
         this.freelancer = new Freelancer();
     }
     
-    public Freelancer getFreelancer() {
-        return this.freelancer;
+    public Freelancer findByID(int id) {
+        return freelancerDAO.findByID(id);
     }
     
+    public List<Freelancer> findByUsername(String username) {
+        return freelancerDAO.findByUsername(username);
+    }
     
+    public List<Freelancer> findByEmail(String email) {
+        return freelancerDAO.findByEmail(email);
+    }
+    
+    public List<Freelancer> findByFirstname(String firstname) {
+        return freelancerDAO.findByFirstname(firstname);
+    }
+    
+    public List<Freelancer> findByLastname(String lastname) {
+        return freelancerDAO.findByLastname(lastname);
+    }
     
 }

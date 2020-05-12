@@ -16,8 +16,7 @@ import model.entity.User;
  * the Freelancer, Provider and Admin versions of methods together
  * @author darra
  */
-@Stateless
-public class UserDAOImpl<T extends User> extends BaseJPADao implements UserDAO<T>{
+public abstract class UserDAOImpl<T extends User> extends BaseJPADao implements UserDAO<T>{
    
     public UserDAOImpl(){
 //        ParameterizedType genericSuperclass = (ParameterizedType) getClass().getGenericSuperclass();

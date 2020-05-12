@@ -31,27 +31,37 @@ public class AdminDAOImpl extends UserDAOImpl<Admin> implements AdminDAO {
 
     @Override
     public List<Admin> findByUsername(String username) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Query q = getEntityManager().createNamedQuery("User.findByUsername")
+                .setParameter("username", username);
+        return (List<Admin>) q.getResultList();
     }
 
     @Override
     public List<Admin> findByFirstname(String firstname) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Query q = getEntityManager().createNamedQuery("User.findByFirstname")
+                .setParameter("username", firstname);
+        return (List<Admin>) q.getResultList();
     }
 
     @Override
     public List<Admin> findByLastname(String lastname) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Query q = getEntityManager().createNamedQuery("User.findByLastname")
+                .setParameter("username", lastname);
+        return (List<Admin>) q.getResultList();
     }
 
     @Override
     public List<Admin> findByPassword(String password) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Query q = getEntityManager().createNamedQuery("User.findByPassword")
+                .setParameter("username", password);
+        return (List<Admin>) q.getResultList();
     }
 
     @Override
     public List<Admin> findByEmail(String email) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Query q = getEntityManager().createNamedQuery("User.findByEmail")
+                .setParameter("username", email);
+        return (List<Admin>) q.getResultList();
     }
 
 }

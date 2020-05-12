@@ -22,8 +22,6 @@ public interface JobDAO extends DAO<Job> {
     public Job add(int id, String description, Collection<Freelancer> freelancersCollection, Collection<Keyword> keywordsCollection, 
             Freelancer assignedTo, Provider creator);
     
-    public Job update();
-    
     public List getOpenJobs();  
     
     public List getJobsOwnedByProvider(int provider_id);
