@@ -7,7 +7,6 @@ package managedBeans;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
-import managedBeans.entities.User;
 
 /**
  * Parent class for login in beans. Login beans are SessionScoped, and store the
@@ -46,14 +45,6 @@ public abstract class Login {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
     
 }
