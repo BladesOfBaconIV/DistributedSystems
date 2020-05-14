@@ -119,7 +119,7 @@ public class JobBean {
     public String deleteJob(int id) {
         try {
             Job.delete(id);
-            return "ProviderJobs";
+            return null; //reeturn to the page this was claled on
         } catch (SQLException e) {
             return "sqlexception"; // TODO add SQLException logging
         }

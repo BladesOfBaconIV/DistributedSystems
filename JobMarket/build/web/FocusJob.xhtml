@@ -16,10 +16,10 @@
                 <ui:insert name="top">Job: #{providerSession.focusJob.title}</ui:insert>
             </div>
             <div id="content" class="left_content">
-                        <h:outputLabel value="Description: " />#{providerSession.focusJob.description}"<br/>
-                        <h:outputLabel value="ID: " />#{providerSession.focusJob.id}"<br/>
-                        <h:outputLabel value="Tokens: " />#{providerSession.focusJob.tokens}"<br/>
-                        <h:outputLabel value="Assigned to: " />#{providerSession.focusJob.freelancer}"<br/>  
+                        <h:outputLabel value="Description: " />#{providerSession.focusJob.description}<br/>
+                        <h:outputLabel value="ID: " />#{providerSession.focusJob.id}<br/>
+                        <h:outputLabel value="Tokens: " />#{providerSession.focusJob.tokens}<br/>
+                        <h:outputLabel value="Assigned to: " />#{providerSession.focusJob.freelancer == -1 ? None : providerSession.focusJob.freelancer}<br/>  
                 </div>
             <div>
                 <div id="left">
