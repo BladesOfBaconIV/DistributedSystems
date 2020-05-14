@@ -48,7 +48,7 @@
                                 #{job.tokens}
                         </h:column>
                         <h:column>
-                            <h:commandButton value="View" action="JobView"/>
+                            <h:commandButton value="View" action="#{providerSession.viewJob(job)}"/>
                         </h:column>
                         <h:column>
                             <h:commandButton value="Delete" action="#{jobBean.deleteJob(job.id)}"/>

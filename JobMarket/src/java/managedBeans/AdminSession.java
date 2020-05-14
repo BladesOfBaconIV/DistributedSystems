@@ -13,20 +13,23 @@ import java.sql.SQLException;
 import managedBeans.entities.Admin;
 
 /**
- *
+ * Session bean to manage logged in Admin users
  * @author User
  */
 @Named(value = "adminSession")
 @SessionScoped
 public class AdminSession extends Login implements Serializable {
 
+    // The loagged in user
     Admin user;
-    /**
-     * Creates a new instance of Login
-     */
+    
     public AdminSession() {
     }
 
+    /**
+     * Tries to log an Admin in using username and password
+     * @return The page to redirect them too
+     */
     @Override
     public String login() {
         try {
@@ -35,7 +38,7 @@ public class AdminSession extends Login implements Serializable {
         } catch (UserNotFoundException e) {
             return "failedLogin";
         } catch (SQLException e) {
-            return "sqlexception";
+            return "sqlexception"; // TODO add SQLException logging
         }
     }
 

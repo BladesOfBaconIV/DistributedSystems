@@ -18,11 +18,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
- *
+ * Class representing a Proovider type user
  * @author User
  */
 public class Provider extends User{
     
+    // SQL statements
     private static final String LOAD_ALL = "SELECT * FROM PROVIDERS";
     private static final String LOAD_BY_USERNAME = "SELECT * FROM PROVIDERS WHERE USERNAME = ? AND PASSWORD = ?";
     private static final String INSERT = "INSERT INTO PROVIDERS (USERNAME, PASSWORD)"
@@ -38,6 +39,12 @@ public class Provider extends User{
         super(username, password);
     }
     
+    /**
+     * Convert the current entry in a ResultSet to a Provider
+     * @param rs,  ResultSet currently looking at correct entry
+     * @return a new Provider
+     * @throws SQLException 
+     */
     private static Provider resultSetToProvider(ResultSet rs) throws SQLException {
         return new Provider(
                     rs.getInt("ID"),
@@ -46,6 +53,14 @@ public class Provider extends User{
             );
     }
     
+    /**
+     * Load a provider using Username and password
+     * @param username
+     * @param password
+     * @return the loaded provider
+     * @throws SQLException
+     * @throws UserNotFoundException 
+     */
     public static Provider load(String username, String password) throws SQLException, UserNotFoundException {
         Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
         PreparedStatement stmt = conn.prepareStatement(LOAD_BY_USERNAME);
@@ -59,6 +74,11 @@ public class Provider extends User{
         throw new UserNotFoundException("User: " + username + " not found!");
     }
     
+    /**
+     * Get all providers
+     * @return ArrayList of all providers
+     * @throws SQLException 
+     */
     public static ArrayList<Provider> loadAll() throws SQLException {
         Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
         Statement stmt = conn.createStatement();
@@ -71,10 +91,19 @@ public class Provider extends User{
         return loaded;
     }
     
+    /**
+     * Get the jobs associated with the provider
+     * @return
+     * @throws SQLException 
+     */
     public ArrayList<Job> fetchJobs() throws SQLException {
         return Job.getByProvider(this.getId());
     }
     
+    /**
+     * Save this provicer to the database
+     * @throws SQLException 
+     */
     public void save() throws SQLException {
         Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
         PreparedStatement stmt = conn.prepareStatement(INSERT);
@@ -85,14 +114,19 @@ public class Provider extends User{
         stmt.executeUpdate();
     }
     
+    /**
+     * Delete a provider from the database
+     * @param id of provider to delete
+     * @throws SQLException 
+     */
     public static void delete(int id) throws SQLException {
         Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
         PreparedStatement stmt = conn.prepareStatement(DELETE);
         PreparedStatement stmtJob = conn.prepareStatement(DELETE_JOBS);
-        
+        // Delete jobs owned by this provider
         stmtJob.setInt(1, id);
         stmtJob.executeUpdate();
-        
+        // Delete provider
         stmt.setInt(1, id);
         stmt.executeUpdate();
     }

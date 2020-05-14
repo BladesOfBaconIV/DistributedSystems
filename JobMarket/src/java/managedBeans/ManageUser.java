@@ -16,19 +16,22 @@ import managedBeans.entities.Freelancer;
 import managedBeans.entities.Provider;
 
 /**
- *
+ * Request bean to help with user management by admins
  * @author User
  */
 @Named(value = "manageUser")
 @RequestScoped
 public class ManageUser {
     
+    // All non-admin users
     private ArrayList<Provider> providers = new ArrayList();
     private ArrayList<Freelancer> freelancers = new ArrayList();
+    // instance variables used for creating new non-admin users
     private String username;
     private String password;
     private String description;
     
+    // injected AdminSession used to ensure the current user is an admin
     @ManagedProperty(value="#{adminSession}")
     @Inject
     private AdminSession admin;
@@ -42,12 +45,20 @@ public class ManageUser {
             this.freelancers = Freelancer.loadAll();
         } catch  (SQLException e) {
             // if problem happens just leave list empty
+            // TODO Log SQLException
         }
     }
     
+    /**
+     * Register a new provider
+     * @return String of web page to redirect user to
+     */
     public String registerProvider() {
         try {
+            // Check user is an admin
             if (!Admin.validAdminID(admin.getUser().getId())) {
+                // if not an admin invalidate the session and return to login
+                admin.logout(); 
                 return "Login";
             }
             new Provider(
@@ -56,26 +67,41 @@ public class ManageUser {
             ).save();
             return "AdminHomePage";
         } catch (SQLException e) {
-            return "sqlexception";
+            return "sqlexception"; // TODO log SQLEXception
         }
     }
     
+    /**
+     * Remove a provider
+     * @param id of provider to remove
+     * @return String of web page to redirect user to
+     */
     public String removeProvider(int id) {
         try {
+            // Check user is an admin
             if (!Admin.validAdminID(admin.getUser().getId())) {
+                // if not an admin invalidate the session and return to login
+                admin.logout(); 
                 return "Login";
             }
             Provider.delete(id);
             this.providers = Provider.loadAll();
             return null; // return to this page
         } catch (SQLException e) {
-            return "sqlexception";
+            return "sqlexception"; // TODO log SQLEXception
         }
     }
     
+    /**
+     * Register a new freelancer
+     * @return String of web page to redirect user to
+     */
     public String registerFreelancer() {
         try {
+            // Check user is an admin
             if (!Admin.validAdminID(admin.getUser().getId())) {
+                // if not an admin invalidate the session and return to login
+                admin.logout(); 
                 return "Login";
             }
             new Freelancer(
@@ -85,20 +111,28 @@ public class ManageUser {
             ).save();
             return "AdminHomePage";
         } catch (SQLException e) {
-            return "sqlexception";
+            return "sqlexception"; // TODO log SQLEXception
         }
     }
     
+    /**
+     * Remove a freelancer
+     * @param id of freelancer to remove
+     * @return String of web page to redirect user to
+     */
     public String removeFreelancer(int id) {
         try {
+            // Check user is an admin
             if (!Admin.validAdminID(admin.getUser().getId())) {
+                // if not an admin invalidate the session and return to login
+                admin.logout(); 
                 return "Login";
             }
             Freelancer.delete(id);
             this.freelancers = Freelancer.loadAll();
             return null; // return to this page
         } catch (SQLException e) {
-            return "sqlexception";
+            return "sqlexception"; // TODO log SQLEXception
         }
     }
 

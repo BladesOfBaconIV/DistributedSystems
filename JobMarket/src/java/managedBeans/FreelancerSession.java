@@ -13,21 +13,23 @@ import java.sql.SQLException;
 import managedBeans.entities.Freelancer;
 
 /**
- *
+ * Session bean to managed logged in Freelancer
  * @author User
  */
 @Named(value = "freelancerSession")
 @SessionScoped
 public class FreelancerSession extends Login implements Serializable {
 
+    // Logged in user
     Freelancer user;
     
-    /**
-     * Creates a new instance of Login
-     */
     public FreelancerSession() {
     }
 
+    /**
+     * Tries to login to Freelancer account using username and password
+     * @return String of web page to redirect user to
+     */
     @Override
     public String login() {
         try {

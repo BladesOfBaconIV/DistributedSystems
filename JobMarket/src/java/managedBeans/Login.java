@@ -8,7 +8,7 @@ package managedBeans;
 import javax.faces.context.FacesContext;
 
 /**
- * Parent class for login in beans. Login beans are SessionScoped, and store the
+ * Parent class for <USERTPYE>Session in beans. Login beans are SessionScoped, and store the
  * logged in user for for the session, i.e until they logout.
  * 
  * @author User
@@ -24,6 +24,10 @@ public abstract class Login {
      */
     public abstract String login();
     
+    /**
+     * Logs out the current user, by ending the session
+     * @return 
+     */
     public String logout() {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().clear();
         return "LoginPage";

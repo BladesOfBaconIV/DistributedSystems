@@ -16,11 +16,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- *
+ * Class to represent admin user
  * @author User
  */
 public class Admin extends User{
     
+    // SQL statments
     private static final String LOAD_BY_USERNAME = "SELECT * FROM ADMINS WHERE USERNAME = ? AND PASSWORD = ?";
     private static final String CHECK_ID = "SELECT * FROM ADMINS WHERE ID = ?";
 
@@ -28,6 +29,14 @@ public class Admin extends User{
         super(id, username, password);
     }
     
+    /**
+     * Loads an admin from the database using username and password
+     * @param username
+     * @param password
+     * @return Admin user
+     * @throws SQLException
+     * @throws UserNotFoundException 
+     */
     public static Admin load(String username, String password) throws SQLException, UserNotFoundException {
         Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
         PreparedStatement stmt = conn.prepareStatement(LOAD_BY_USERNAME);
@@ -45,6 +54,12 @@ public class Admin extends User{
         throw new UserNotFoundException("User: " + username + " not found!");
     }
     
+    /**
+     * Checks that an ID is that of a valid admin
+     * @param id
+     * @return boolean
+     * @throws SQLException 
+     */
     public static boolean validAdminID(int id) throws SQLException {
         Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
         PreparedStatement stmt = conn.prepareStatement(CHECK_ID);

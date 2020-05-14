@@ -16,16 +16,19 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
- *
+ * Class representing freelancer user
  * @author User
  */
 public class Freelancer extends User {
     
+    // SQL statements
     private static final String LOAD_BY_USERNAME = "SELECT * FROM FREELANCERS WHERE USERNAME = ? AND PASSWORD = ?";
+    private static final String LOAD_BY_ID = "SELECT * FROM FREELANCERS WHERE ID = ?";
     private static final String LOAD_ALL = "SELECT * FROM FREELANCERS";
     private static final String DELETE = "DELETE FROM FREELANCERS WHERE ID = ?";
     private static final String INSERT = "INSERT INTO FREELANCERS (USERNAME, PASSWORD, DESCRIPTION, TOKENS)"
             + " VALUES (?, ?, ?, ?)";
+    private static final String UPDATE_TOKENS = "UPDATE FREELANCERS SET TOKENS = ? WHERE ID = ?";
     
     private String description;
     private int tokens = 0;
@@ -57,6 +60,12 @@ public class Freelancer extends User {
         this.tokens = tokens;
     }
     
+    /**
+     * convert a ResultSet entry into a new Freelancer
+     * @param rs ResultSet pointing to entry to load
+     * @return a new Freelancer
+     * @throws SQLException 
+     */
     private static Freelancer resultSetToFreelancer(ResultSet rs) throws SQLException {
         return new Freelancer(
                     rs.getInt("ID"),
@@ -67,6 +76,14 @@ public class Freelancer extends User {
             );
     }
     
+    /**
+     * Loads a freelancer using a username and password
+     * @param username
+     * @param password
+     * @return Loaded Freelancer
+     * @throws SQLException
+     * @throws UserNotFoundException 
+     */
     public static Freelancer load(String username, String password) throws SQLException, UserNotFoundException {
         Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
         PreparedStatement stmt = conn.prepareStatement(LOAD_BY_USERNAME);
@@ -80,6 +97,30 @@ public class Freelancer extends User {
         throw new UserNotFoundException("User: " + username + " not found!");
     }
     
+    /**
+     * Loads a Freelancer using their ID
+     * @param id
+     * @return a new Freelancer
+     * @throws SQLException
+     * @throws UserNotFoundException 
+     */
+    public static Freelancer load(int id) throws SQLException, UserNotFoundException {
+        Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+        PreparedStatement stmt = conn.prepareStatement(LOAD_BY_ID);
+
+        stmt.setInt(1, id);
+        ResultSet loaded = stmt.executeQuery();
+        if (loaded.next()) {
+            return resultSetToFreelancer(loaded);
+        }
+        throw new UserNotFoundException("User: " + id + " not found!");
+    }
+    
+    /**
+     * Loads all the Freelancers
+     * @return ArrayList of all freelancer
+     * @throws SQLException 
+     */
     public static ArrayList<Freelancer> loadAll() throws SQLException {
         Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
         Statement stmt = conn.createStatement();
@@ -92,6 +133,10 @@ public class Freelancer extends User {
         return loaded;
     }
     
+    /**
+     * Save a Freelancer to the database
+     * @throws SQLException 
+     */
     public void save() throws SQLException {
         Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
         PreparedStatement stmt = conn.prepareStatement(INSERT);
@@ -104,12 +149,28 @@ public class Freelancer extends User {
         stmt.executeUpdate();
     }
     
+    /**
+     * Update a Freelancers tokens, by adding on more to them
+     * @param tokens, new tokens to add to total
+     * @throws SQLException 
+     */
+    public void updateTokens(int tokens) throws SQLException{
+        Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+        PreparedStatement stmt = conn.prepareStatement(UPDATE_TOKENS);
+        stmt.setInt(1, this.tokens + tokens);
+        stmt.setInt(2, this.id);
+        stmt.executeUpdate();
+    }
+    
+    /**
+     * Delete a Freelancer bby id
+     * @param id of freelancer to delete
+     * @throws SQLException 
+     */
     public static void delete(int id) throws SQLException {
         Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-        PreparedStatement stmt = conn.prepareStatement(DELETE);
-        
-        stmt.setInt(1, id);
-        
+        PreparedStatement stmt = conn.prepareStatement(DELETE);      
+        stmt.setInt(1, id);       
         stmt.executeUpdate();
     }
     

@@ -6,6 +6,7 @@
 package managedBeans.entities;
 
 import static database.DBConstants.*;
+import database.exceptions.UserNotFoundException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -15,23 +16,29 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
- *
+ * Class representing a job
  * @author User
  */
 public class Job {
     
+    // SQLL Statements
     private static final String GET_BY_PROVIDER = "SELECT * FROM JOBS WHERE PROVIDER = ?";
     private static final String GET_ALL = "SELECT * FROM JOBS";
+    private static final String GET_BIDS = "SELECT * FROM JOB_BIDS WHERE JOB_ID = ?";
     private static final String UPDATE_STATUS = "UPDATE JOBS SET STATUS = ? WHERE ID = ?";
+    private static final String UPDATE_FREELANCER = "UPDATE JOBS SET FREELANCER = ? WHERE ID = ?";
     private static final String DELETE = "DELETE FROM JOBS WHERE ID = ?";
     private static final String INSERT = "INSERT INTO JOBS "
             + "(TITLE, DESCRIPTION, STATUS, TOKENS, PROVIDER, FREELANCER) VALUES (?, ?, ?, ?, ?, ?)";
+   // private static final String INSERT_KEYWORDS = "INSERT INTO KEYWORDS (JOB_ID, KEYWORD)"
+     //       + " VALUES (?, ?)"; // TODO add support for keywords
     private static final String APPLY = "INSERT INTO JOB_BIDS (JOB_ID, FREELANCER_ID)"
             + " VALUES (?, ?)";
     private static final String UNAPPLY = "DELETE FROM JOB_BIDS WHERE JOB_ID = ? "
             + "AND FREELANCER_ID = ?";
     private static final String HAS_APPLIED = "SELECT * FROM JOB_BIDS WHERE "
             + "JOB_ID = ? AND FREELANCER_ID = ?";
+    private static final String REMOVE_APPLICATIONS = "DELETE FROM JOB_BIDS WHERE JOB_ID = ?";
     
     public enum JobStatus {
         OPEN, CLOSED, COMPLETED
@@ -44,6 +51,7 @@ public class Job {
     private int tokens;
     private int provider;
     private int freelancer;
+    // private String[] keywords; // TODO
 
     public Job(int id, String title, String description, JobStatus status, int tokens, int provider) {
         this.id = id;
@@ -62,6 +70,10 @@ public class Job {
         this.provider = provider;
     }
     
+    /**
+     * Save the job to the database
+     * @throws SQLException 
+     */
     public void save() throws SQLException{
         Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
         PreparedStatement stmt = conn.prepareStatement(INSERT);
@@ -74,14 +86,24 @@ public class Job {
         stmt.executeUpdate();
     }
     
-    public void updateStatus() throws SQLException{
+    /**
+     * Update the status of a job
+     * @param js the new JobStatus
+     * @throws SQLException 
+     */
+    public void updateStatus(JobStatus js) throws SQLException{
         Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
         PreparedStatement stmt = conn.prepareStatement(UPDATE_STATUS);
-        stmt.setString(1, this.status.name());
+        stmt.setString(1, js.name());
         stmt.setInt(2, this.id);
         stmt.executeUpdate();
     }
     
+    /**
+     * Delete a job from the database
+     * @param id
+     * @throws SQLException 
+     */
     public static void delete(int id) throws SQLException {
         Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
         PreparedStatement stmt = conn.prepareStatement(DELETE);
@@ -89,6 +111,12 @@ public class Job {
         stmt.executeUpdate();
     }
     
+    /**
+     * Convert the current entry in a ResultSet to a job
+     * @param rs Resultset currently pointing at entry to load
+     * @return a new Job
+     * @throws SQLException 
+     */
     private static Job resultSetToJob(ResultSet rs) throws SQLException {
         Job temp = new Job(
                     rs.getInt("ID"),
@@ -98,11 +126,19 @@ public class Job {
                     rs.getInt("TOKENS"),
                     rs.getInt("PROVIDER")
             );
+        // Check if the freelancer id was NULL in table, i.e. not assigned yet
+        // and if not assigned set id to -1, (an impossible freelancer id)
         int freelancer = rs.getInt("FREELANCER");
         temp.setFreelancer(rs.wasNull() ? -1 : freelancer);
         return temp;
     }
     
+    /**
+     * Convert a ResultSet to an ArrayList
+     * @param rs ResultSet currently not pointing to first entry
+     * @return ArrayList of Jobs
+     * @throws SQLException 
+     */
     private static ArrayList<Job> resultSetToArrayList(ResultSet rs) throws SQLException {
         ArrayList<Job> found = new ArrayList();
         while (rs.next()) {
@@ -111,6 +147,11 @@ public class Job {
         return found;
     }
     
+    /**
+     * Get all jobs
+     * @return ArrayList of all jobs
+     * @throws SQLException 
+     */
     public static ArrayList<Job> getAll() throws SQLException{
         Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
         Statement stmt = conn.createStatement();
@@ -118,6 +159,12 @@ public class Job {
         return resultSetToArrayList(rs);
     }
     
+    /**
+     * Get jobs by provider id
+     * @param providerID, id of provider
+     * @return ArrayList of jobs
+     * @throws SQLException 
+     */
     public static ArrayList<Job> getByProvider(int providerID) throws SQLException{
         Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
         PreparedStatement stmt = conn.prepareStatement(GET_BY_PROVIDER);
@@ -126,6 +173,66 @@ public class Job {
         return resultSetToArrayList(rs);
     }
     
+    /**
+     * Get all the applications made to do a job
+     * @return ArrayList of Freelancers who have applied
+     * @throws SQLException 
+     */
+    public ArrayList<Freelancer> getApplications() throws SQLException{
+        Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+        PreparedStatement stmt = conn.prepareStatement(GET_BIDS);
+        stmt.setInt(1, this.id);
+        ResultSet bids = stmt.executeQuery();
+        ArrayList<Freelancer> applicants = new ArrayList();
+        while (bids.next()) {
+            try {
+                applicants.add(Freelancer.load(bids.getInt("FREELANCER_ID")));
+            } catch (UserNotFoundException e) {
+                // TODO log failed attempt.
+            }
+        }
+        return applicants;
+    }
+    
+    /**
+     * Accept a job bid
+     * @param freelancerID, id of freelancer who's bid to accept
+     * @throws SQLException 
+     */
+    public void acceptBid(int freelancerID) throws SQLException {
+        Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+        PreparedStatement stmtFree = conn.prepareStatement(UPDATE_FREELANCER);
+        PreparedStatement stmtBids = conn.prepareStatement(REMOVE_APPLICATIONS);
+        // Set job to closed
+        this.updateStatus(JobStatus.CLOSED);
+        // Update the freelancer associated with this job
+        stmtFree.setInt(1, freelancerID);
+        stmtFree.setInt(2, this.id);
+        stmtFree.executeUpdate();
+        // Remove all other applications for this job
+        stmtBids.setInt(1, this.id);
+        stmtBids.executeUpdate();
+    }
+    
+    /**
+     * Mark a job as being done. Will update the status in the database, and
+     * pay the freelancer
+     * @throws SQLException 
+     */
+    public void finished() throws SQLException {
+        this.updateStatus(JobStatus.COMPLETED); 
+        try {
+            Freelancer.load(this.freelancer).updateTokens(this.tokens);
+        } catch (UserNotFoundException e) {
+            // if not freelancer found don't pay anyone
+        }
+    }
+    
+    /**
+     * Make an for a freelancer application for the job
+     * @param freelancerID, id of freelancer applying
+     * @throws SQLException 
+     */
     public void apply(int freelancerID) throws SQLException {
         Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
         PreparedStatement stmt = conn.prepareStatement(APPLY);
@@ -134,6 +241,11 @@ public class Job {
         stmt.executeUpdate();
     }
     
+    /**
+     * Remove a freelancers application to do the job
+     * @param freelancerID, id of freelancer whose application to remove
+     * @throws SQLException 
+     */
     public void unApply(int freelancerID) throws SQLException {
         Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
         PreparedStatement stmt = conn.prepareStatement(UNAPPLY);
@@ -142,6 +254,12 @@ public class Job {
         stmt.executeUpdate();
     }
     
+    /**
+     * Check if a freelancer has applied for a job
+     * @param freelancerID, id of freelancer to check
+     * @return boolean 
+     * @throws SQLException 
+     */
     public boolean hasApplied(int freelancerID) throws SQLException {
         Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
         PreparedStatement stmt = conn.prepareStatement(HAS_APPLIED);

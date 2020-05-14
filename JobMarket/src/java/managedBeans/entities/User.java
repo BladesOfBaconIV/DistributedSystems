@@ -6,7 +6,7 @@
 package managedBeans.entities;
 
 /**
- *
+ *Abstract User representation
  * @author User
  */
 public abstract class User {

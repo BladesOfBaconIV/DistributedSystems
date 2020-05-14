@@ -22,12 +22,13 @@
                         New Freelancer Details: <br/>
                         <h:outputLabel value="Username: " />
                         <h:inputText id="title" value="#{manageUser.username}"/><br/>
-                        <h:outputLabel value="Password" />
+                        <h:outputLabel value="Password:   " />
                         <h:inputSecret id="password" value="#{manageUser.password}"/><br/>
                         <h:outputLabel value="Description: " />
                         <h:inputText id="description" value="#{manageUser.description}"/><br/>
                         <h:commandButton value="Create" action="#{manageUser.registerFreelancer}"/> 
                     </h:form>
+                    <h:commandButton value="Return" action="AdminHomePage"/>
                 </div>
             </div>
         </h:form>

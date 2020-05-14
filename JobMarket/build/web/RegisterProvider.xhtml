@@ -22,12 +22,14 @@
                         New Provider Details: <br/>
                         <h:outputLabel value="Username: " />
                         <h:inputText id="title" value="#{manageUser.username}"/><br/>
-                        <h:outputLabel value="Password" />
+                        <h:outputLabel value="Password:   " />
                         <h:inputSecret id="password" value="#{manageUser.password}"/><br/>
                         <h:commandButton value="Create" action="#{manageUser.registerProvider}"/> 
                     </h:form>
+                    <h:commandButton value="Return" action="AdminHomePage"/>
                 </div>
             </div>
+            
         </h:form>
 
     </h:body>
