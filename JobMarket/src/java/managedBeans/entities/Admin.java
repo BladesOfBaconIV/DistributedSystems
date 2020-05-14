@@ -22,6 +22,7 @@ import java.sql.SQLException;
 public class Admin extends User{
     
     private static final String LOAD_BY_USERNAME = "SELECT * FROM ADMINS WHERE USERNAME = ? AND PASSWORD = ?";
+    private static final String CHECK_ID = "SELECT * FROM ADMINS WHERE ID = ?";
 
     public Admin(int id, String username, String password) {
         super(id, username, password);
@@ -42,6 +43,16 @@ public class Admin extends User{
             );
         }
         throw new UserNotFoundException("User: " + username + " not found!");
+    }
+    
+    public static boolean validAdminID(int id) throws SQLException {
+        Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+        PreparedStatement stmt = conn.prepareStatement(CHECK_ID);
+        
+        stmt.setInt(1, id);      
+        ResultSet rs = stmt.executeQuery();
+        
+        return rs.next();
     }
  
 }

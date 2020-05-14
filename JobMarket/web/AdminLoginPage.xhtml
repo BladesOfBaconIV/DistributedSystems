@@ -23,10 +23,10 @@
                     <h:form>
                         Log in here: <br/>
                         <h:outputLabel value="User Name:" />
-                        <h:inputText id="username" value="#{adminLogin.username}"/><br/>
+                        <h:inputText id="username" value="#{adminSession.username}"/><br/>
                         <h:outputLabel value="Password:" />
-                        <h:inputSecret id="password" value="#{adminLogin.password}"/><br/>
-                        <h:commandButton value="Login" action="#{adminLogin.login}"/> 
+                        <h:inputSecret id="password" value="#{adminSession.password}"/><br/>
+                        <h:commandButton value="Login" action="#{adminSession.login}"/> 
                     </h:form>
                 </div>
             </div>

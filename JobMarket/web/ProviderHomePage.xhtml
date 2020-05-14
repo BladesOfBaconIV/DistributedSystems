@@ -6,32 +6,32 @@
 
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <h:outputStylesheet name="./css/default.css"/>
-        <h:outputStylesheet name="./css/cssLayout.css"/>
         <title>Provider Home Page</title>
     </h:head>
 
     <h:body>
 
+        <h:form>
+            <div id="top" class="top">
+                <ui:insert name="top">Welcome #{providerSession.user.username}!</ui:insert>
+            </div>
+            <div>
+                <div id="left">
+                    <ui:insert name="left"></ui:insert>
+                </div>
+                <div id="content" class="left_content">
+                    <ui:insert name="content"></ui:insert>
 
-        <div id="top" class="top">
-            <ui:insert name="top">Provider Home Page</ui:insert>
-        </div>
-        <div>
-            <div id="left">
-                <ui:insert name="left"></ui:insert>
+                    <h:panelGrid columns="3" cellpadding="5">
+                        <h:commandButton value="See my jobs" action="ProviderJobs"/>
+                        <h:commandButton value="Add new job" action="CreateJob"/>
+                        <h:commandButton value="Logout" action="#{providerSession.logout}"/>
+                    </h:panelGrid>
+
+                </div>
             </div>
-            <div id="content" class="left_content">
-                <ui:insert name="content"></ui:insert>
-                
-                <h:panelGrid columns="3" cellpadding="5">
-                    <h:commandButton value="See my jobs" action="ProviderJobsPage"/>
-                    <h:commandButton value="Add new job" action="CreateJobPage"/>
-                    <h:commandButton value="Logout" action="#{providerLogin.logout}"/>
-                </h:panelGrid>
-                
-            </div>
-        </div>
+        </h:form>
+            
     </h:body>
 
 </html>

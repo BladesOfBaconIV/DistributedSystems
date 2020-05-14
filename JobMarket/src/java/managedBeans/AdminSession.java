@@ -10,34 +10,41 @@ import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.sql.SQLException;
-import managedBeans.entities.Freelancer;
+import managedBeans.entities.Admin;
 
 /**
  *
  * @author User
  */
-@Named(value = "freelancerLogin")
+@Named(value = "adminSession")
 @SessionScoped
-public class FreelancerLogin extends Login implements Serializable {
+public class AdminSession extends Login implements Serializable {
 
-    Freelancer user;
-    
+    Admin user;
     /**
      * Creates a new instance of Login
      */
-    public FreelancerLogin() {
+    public AdminSession() {
     }
 
     @Override
     public String login() {
         try {
-            this.user = Freelancer.load(this.username, this.password);
-            return "FreelancerHomePage";
+            this.user = Admin.load(this.username, this.password);
+            return "AdminHomePage";
         } catch (UserNotFoundException e) {
             return "failedLogin";
         } catch (SQLException e) {
             return "sqlexception";
         }
-    }    
+    }
+
+    public Admin getUser() {
+        return user;
+    }
+
+    public void setUser(Admin user) {
+        this.user = user;
+    }
     
 }

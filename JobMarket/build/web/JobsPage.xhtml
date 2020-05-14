@@ -7,55 +7,63 @@
 
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <h:outputStylesheet name="./css/default.css"/>
-        <h:outputStylesheet name="./css/cssLayout.css"/>
-        <title>Jobs</title>
+        <title>Open Jobs</title>
     </h:head>
 
     <h:body>
-        <div id="top" class="top">
-            <ui:insert name="top">Jobs</ui:insert>
-        </div>
-        <div>
-            <div id="left">
-                <ui:insert name="left"></ui:insert>
+        <h:form>
+            <div id="top" class="top">
+                <ui:insert name="top">Open Jobs</ui:insert>
             </div>
-            <div id="content" class="left_content">
-                <ui:insert name="content"></ui:insert>
-                
-                <h:panelGrid columns="3" cellpadding="5">
-                    <h:commandButton value="Find by description" action="FindByDecription"/>
-                    <h:commandButton value="Open Jobs" action="OpenJobs"/>
-                    <h:commandButton value="Jobs by provider" action="ProviderJobsPage"/>
-                </h:panelGrid>
+            <div>
+                <div id="left">
+                    <ui:insert name="left"></ui:insert>
+                </div>
+                <div id="content" class="left_content">
+                    <ui:insert name="content"></ui:insert>
 
-                <h:dataTable value="#{jobView.getAll}" var="job"
-                        border='1' width='300' cellpadding="5">
-                    <h:column>
-                        <f:facet name='header'>ID</f:facet>
-                            #{job.id}
-                    </h:column>
-                    <h:column>
-                        <f:facet name='header'>Description</f:facet>
-                            #{job.desciption}
-                    </h:column>
-                    <h:column>
-                        <f:facet name='header'>Phone</f:facet>
-                            #{job.keywordsCollection}
-                    </h:column>
-                    <h:column>
-                        <f:facet name='header'>Email</f:facet>
-                            #{job.assignedTo}
-                    </h:column>            
-                    <h:column>
-                        <f:facet name='header'>Salary</f:facet>
-                            #{job.creator}
-                    </h:column>
-                </h:dataTable>
-                
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <h:commandButton value="Find by description" action="FindByDecription"/>
+                        <h:commandButton value="Return" action="FreelancerHomePage"/>
+                    </h:panelGrid>
+
+                    <h:dataTable value="#{jobBean.getByStatus(jobBean.statuses[0])}" var="job"
+                            border='1' width='300' cellpadding="5">
+                        <h:column>
+                            <f:facet name='header'>ID</f:facet>
+                                #{job.id}
+                        </h:column>
+                        <h:column>
+                            <f:facet name='header'>Title</f:facet>
+                                #{job.title}
+                        </h:column>
+                        <h:column>
+                            <f:facet name='header'>Description</f:facet>
+                                #{job.description}
+                        </h:column>
+                        <h:column>
+                            <f:facet name='header'>Provider</f:facet>
+                                #{job.provider}
+                        </h:column>          
+                        <h:column>
+                            <f:facet name='header'>Tokens</f:facet>
+                                #{job.tokens}
+                        </h:column>
+                        <h:column>
+                            <h:commandButton value="Apply" 
+                                             action="#{jobBean.applyToJob(job)}"
+                                             rendered="#{!jobBean.hasApplied(job)}"/>
+                        </h:column>
+                        <h:column>
+                            <h:commandButton value="Un-Apply" 
+                                             action="#{jobBean.unApplyToJob(job)}"
+                                             rendered="#{jobBean.hasApplied(job)}"/>
+                        </h:column>
+                    </h:dataTable>
+
+                </div>
             </div>
-        </div>
-
+        </h:form>
     </h:body>
 
 </html>

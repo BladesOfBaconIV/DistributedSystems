@@ -7,27 +7,21 @@
 
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Open Jobs</title>
+        <title>Jobs</title>
     </h:head>
 
     <h:body>
-        <h:form>
-            <div id="top" class="top">
-                <ui:insert name="top">Open Jobs</ui:insert>
+        <div id="top" class="top">
+            <h><ui:insert name="top">#{providerSession.username}'s Jobs</ui:insert></h>
+        </div>
+        <div>
+            <div id="left">
+                <ui:insert name="left"></ui:insert>
             </div>
-            <div>
-                <div id="left">
-                    <ui:insert name="left"></ui:insert>
-                </div>
-                <div id="content" class="left_content">
-                    <ui:insert name="content"></ui:insert>
-
-                    <h:panelGrid columns="2" cellpadding="5">
-                        <h:commandButton value="Find by description" action="FindByDecription"/>
-                        <h:commandButton value="Return" action="FreelancerHomePage"/>
-                    </h:panelGrid>
-
-                    <h:dataTable value="#{jobBean.getByStatus(jobBean.statuses[0])}" var="job"
+            <div id="content" class="left_content">
+                <ui:insert name="content"></ui:insert>
+                <h:form>
+                    <h:dataTable value="#{providerSession.fetchJobs()}" var="job"
                             border='1' width='300' cellpadding="5">
                         <h:column>
                             <f:facet name='header'>ID</f:facet>
@@ -42,28 +36,30 @@
                                 #{job.description}
                         </h:column>
                         <h:column>
-                            <f:facet name='header'>Provider</f:facet>
-                                #{job.provider}
-                        </h:column>          
+                            <f:facet name='header'>Status</f:facet>
+                                #{job.status}
+                        </h:column>
+                        <h:column>
+                            <f:facet name='header'>Assigned</f:facet>
+                                #{job.freelancer == -1 ? "None" : job.freelancer}
+                        </h:column>            
                         <h:column>
                             <f:facet name='header'>Tokens</f:facet>
                                 #{job.tokens}
                         </h:column>
                         <h:column>
-                            <h:commandButton value="Apply" 
-                                             action="#{jobBean.applyToJob(job)}"
-                                             rendered="#{!jobBean.hasApplied(job)}"/>
+                            <h:commandButton value="View" action="JobView"/>
                         </h:column>
                         <h:column>
-                            <h:commandButton value="Un-Apply" 
-                                             action="#{jobBean.unApplyToJob(job)}"
-                                             rendered="#{jobBean.hasApplied(job)}"/>
+                            <h:commandButton value="Delete" action="#{jobBean.deleteJob(job.id)}"/>
                         </h:column>
+                        
                     </h:dataTable>
-
-                </div>
+                    <h:commandButton value="Return" action="ProviderHomePage"/>
+                </h:form>
             </div>
-        </h:form>
+        </div>
+
     </h:body>
 
 </html>

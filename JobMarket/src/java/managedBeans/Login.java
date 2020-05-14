@@ -6,7 +6,6 @@
 package managedBeans;
 
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
 
 /**
  * Parent class for login in beans. Login beans are SessionScoped, and store the
@@ -26,8 +25,7 @@ public abstract class Login {
     public abstract String login();
     
     public String logout() {
-        ((HttpSession) FacesContext.getCurrentInstance()
-                    .getExternalContext().getSession(false)).invalidate();
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().clear();
         return "LoginPage";
     }
 

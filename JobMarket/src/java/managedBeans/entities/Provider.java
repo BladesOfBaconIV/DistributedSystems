@@ -14,6 +14,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
@@ -22,10 +23,27 @@ import java.util.ArrayList;
  */
 public class Provider extends User{
     
+    private static final String LOAD_ALL = "SELECT * FROM PROVIDERS";
     private static final String LOAD_BY_USERNAME = "SELECT * FROM PROVIDERS WHERE USERNAME = ? AND PASSWORD = ?";
+    private static final String INSERT = "INSERT INTO PROVIDERS (USERNAME, PASSWORD)"
+            + "VALUES (?, ?)";
+    private static final String DELETE = "DELETE FROM PROVIDERS WHERE ID = ?";
+    private static final String DELETE_JOBS = "DELETE FROM JOBS WHERE PROVIDER = ?";
 
     public Provider(int id, String username, String password) {
         super(id, username, password);
+    }
+
+    public Provider(String username, String password) {
+        super(username, password);
+    }
+    
+    private static Provider resultSetToProvider(ResultSet rs) throws SQLException {
+        return new Provider(
+                    rs.getInt("ID"),
+                    rs.getString("USERNAME"),
+                    rs.getString("PASSWORD")
+            );
     }
     
     public static Provider load(String username, String password) throws SQLException, UserNotFoundException {
@@ -36,17 +54,47 @@ public class Provider extends User{
         stmt.setString(2, password);
         ResultSet loaded = stmt.executeQuery();
         if (loaded.next()) {
-            return new Provider(
-                    loaded.getInt("ID"),
-                    loaded.getString("USERNAME"),
-                    loaded.getString("PASSWORD")
-            );
+            return resultSetToProvider(loaded);
         }
         throw new UserNotFoundException("User: " + username + " not found!");
     }
     
-    public ArrayList<Job> getJobs() throws SQLException {
+    public static ArrayList<Provider> loadAll() throws SQLException {
+        Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+        Statement stmt = conn.createStatement();
+        
+        ResultSet found = stmt.executeQuery(LOAD_ALL);
+        ArrayList<Provider> loaded = new ArrayList();
+        while (found.next()) {
+            loaded.add(resultSetToProvider(found));
+        }
+        return loaded;
+    }
+    
+    public ArrayList<Job> fetchJobs() throws SQLException {
         return Job.getByProvider(this.getId());
+    }
+    
+    public void save() throws SQLException {
+        Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+        PreparedStatement stmt = conn.prepareStatement(INSERT);
+        
+        stmt.setString(1, this.username);
+        stmt.setString(2, this.password);
+        
+        stmt.executeUpdate();
+    }
+    
+    public static void delete(int id) throws SQLException {
+        Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+        PreparedStatement stmt = conn.prepareStatement(DELETE);
+        PreparedStatement stmtJob = conn.prepareStatement(DELETE_JOBS);
+        
+        stmtJob.setInt(1, id);
+        stmtJob.executeUpdate();
+        
+        stmt.setInt(1, id);
+        stmt.executeUpdate();
     }
 
 }

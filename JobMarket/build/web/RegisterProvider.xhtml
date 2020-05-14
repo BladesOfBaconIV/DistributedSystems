@@ -6,31 +6,30 @@
 
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Freelancer Login Page</title>
+        <title>Register Provider</title>
     </h:head>
 
     <h:body>
-        <h:form>
+        
+        <h:form>  
             <div id="top" class="top">
-                <ui:insert name="top">Freelancer Login Page</ui:insert>
+                <ui:insert name="top">Register Provider</ui:insert>
             </div>
             <div>
-                <div id="left">
-                    <ui:insert name="left"></ui:insert>
-                </div>
                 <div id="content" class="left_content">
                     <ui:insert name="content"></ui:insert>
                     <h:form>
-                        Log in here: <br/>
-                        <h:outputLabel value="User Name:" />
-                        <h:inputText id="username" value="#{freelancerSession.username}"/><br/>
-                        <h:outputLabel value="Password:" />
-                        <h:inputSecret id="password" value="#{freelancerSession.password}"/><br/>
-                        <h:commandButton value="Login" action="#{freelancerSession.login}"/> 
+                        New Provider Details: <br/>
+                        <h:outputLabel value="Username: " />
+                        <h:inputText id="title" value="#{manageUser.username}"/><br/>
+                        <h:outputLabel value="Password" />
+                        <h:inputSecret id="password" value="#{manageUser.password}"/><br/>
+                        <h:commandButton value="Create" action="#{manageUser.registerProvider}"/> 
                     </h:form>
                 </div>
             </div>
         </h:form>
+
     </h:body>
 
 </html>
